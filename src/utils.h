@@ -26,7 +26,6 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <malloc.h>
-#include <sys/syscall.h>
 #include <sys/types.h>
 
 #ifndef __UTILS_H__
@@ -109,9 +108,13 @@ static inline uint64_t rdtsc(void) {
     return low | ((uint64_t)high) << 32;
 }
 
+#if !defined(_GNU_SOURCE) || !defined(__GLIBC__) || __GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 30)
+#include <sys/syscall.h>
+
 static inline int gettid() {
     return syscall(SYS_gettid);
 }
+#endif
 
 // EPFL libslock
 #define my_random xorshf96
