@@ -124,8 +124,8 @@ static int __scl_mutex_lock_begin(scl_mutex_t *impl, tinfo_t *info,
             // sleep with granularity of sleep_granularity us
             while (banned_time > sleep_time) {
                 struct timespec req = {
-                    .tv_sec  = banned_time / cycle_per_s,
-                    .tv_nsec = (banned_time % cycle_per_s / cycle_per_us /
+                    .tv_sec  = banned_time / CYCLE_PER_S,
+                    .tv_nsec = (banned_time % CYCLE_PER_S / CYCLE_PER_US /
                                 sleep_granularity) *
                                sleep_granularity * 1000,
                 };
@@ -177,7 +177,7 @@ static int __scl_mutex_lock_begin(scl_mutex_t *impl, tinfo_t *info,
                 struct timespec timeout       = {
                     .tv_sec = 0, // slice will be less then 1 sec
                     .tv_nsec =
-                        (slice_left / (cycle_per_us * sleep_granularity)) *
+                        (slice_left / (CYCLE_PER_US * sleep_granularity)) *
                         sleep_granularity * 1000,
                 };
                 futex((int *)&impl->slice_valid, FUTEX_WAIT_PRIVATE, 0,
@@ -227,7 +227,7 @@ static int __scl_mutex_lock_begin(scl_mutex_t *impl, tinfo_t *info,
 
             now               = rdtsc();
             info->start_ticks = now;
-            info->slice       = now + fairlock_granularity;
+            info->slice       = now + FAIRLOCK_GRANULARITY;
             impl->slice       = info->slice;
             impl->slice_valid = 1;
             // wake up successor if necessary

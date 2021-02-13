@@ -10,12 +10,12 @@ CFLAGS=-I../include/ -I../obj/CLHT/include/ -I../obj/CLHT/external/include/ -fPI
 .SECONDEXPANSION:
 ../obj/%.o: $$(lastword $$(subst /, ,%)).c $$(lastword $$(subst /, ,%)).h
 	$(eval $@_TMP := $(shell echo $@ | cut -d/ -f3 | cut -d_ -f1))
-	$(CC) $(CFLAGS) -D$$(echo $@ | cut -d/ -f3 | cut -d_ -f1 | tr '[a-z]' '[A-Z]') -DCOND_VAR=$(COND_VAR) -DFCT_LINK_SUFFIX=$($@_TMP) -DWAITING_$$(echo $@ | cut -d/ -f3 | cut -d_ -f2- | tr '[a-z]' '[A-Z]') -o $@ -c $<
+	$(CC) $(CFLAGS) -DCYCLE_PER_US=$(CYCLE_PER_US) -DFAIRLOCK_GRANULARITY=$(FAIRLOCK_GRANULARITY) -D$$(echo $@ | cut -d/ -f3 | cut -d_ -f1 | tr '[a-z]' '[A-Z]') -DCOND_VAR=$(COND_VAR) -DFCT_LINK_SUFFIX=$($@_TMP) -DWAITING_$$(echo $@ | cut -d/ -f3 | cut -d_ -f2- | tr '[a-z]' '[A-Z]') -o $@ -c $<
 
 .SECONDEXPANSION:
 ../obj/%.o: $$(firstword $$(subst _, , $$(lastword $$(subst /, ,%)))).c ../include/$$(firstword $$(subst _, , $$(lastword $$(subst /, ,%)))).h
 	$(eval $@_TMP := $(shell echo $@ | cut -d/ -f3 | cut -d_ -f1))
-	$(CC) $(CFLAGS) -D$$(echo $@ | cut -d/ -f3 | cut -d_ -f1 | tr '[a-z]' '[A-Z]') -DCOND_VAR=$(COND_VAR) -DFCT_LINK_SUFFIX=$($@_TMP) -DWAITING_$$(echo $@ | cut -d/ -f3 | cut -d_ -f2- | tr '[a-z]' '[A-Z]') -o $@ -c $<
+	$(CC) $(CFLAGS) -DCYCLE_PER_US=$(CYCLE_PER_US) -DFAIRLOCK_GRANULARITY=$(FAIRLOCK_GRANULARITY) -D$$(echo $@ | cut -d/ -f3 | cut -d_ -f1 | tr '[a-z]' '[A-Z]') -DCOND_VAR=$(COND_VAR) -DFCT_LINK_SUFFIX=$($@_TMP) -DWAITING_$$(echo $@ | cut -d/ -f3 | cut -d_ -f2- | tr '[a-z]' '[A-Z]') -o $@ -c $<
 
 .SECONDEXPANSION:
 ../lib/lib%.so: ../obj/%/interpose.o ../obj/%/utils.o $$(subst algo,%,../obj/algo/algo.o)

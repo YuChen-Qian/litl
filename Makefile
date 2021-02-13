@@ -3,6 +3,13 @@
 # - we need special version of CLHT and ssmem (to compile them for shared library)
 include Makefile.config
 
+ifndef CYCLE_PER_US
+$(error CYCLE_PER_US not set. Set CYCLE_PER_US according to your machine CPU-SPEED)
+endif
+ifndef FAIRLOCK_GRANULARITY
+$(info FAIRLOCK_GRANULARITY not set. Set FAIRLOCK_GRANULARITY according to your machine CPU-SPEED)
+endif
+
 LDFLAGS=-LCLHT/external/lib -LCLHT -lsspfd -lssmem -lclht -lrt -lm -m64 -pthread
 CFLAGS=-Iinclude/
 
@@ -23,7 +30,7 @@ no_cond_var: all
 
 %.so: obj/CLHT/libclht.a obj/
 	mkdir -p lib/
-	$(MAKE) -C src/ ../lib/$@
+	$(MAKE) CYCLE_PER_US=$(CYCLE_PER_US) FAIRLOCK_GRANULARITY=$(FAIRLOCK_GRANULARITY) -C src/ ../lib/$@
 
 obj/:
 	mkdir -p $@
