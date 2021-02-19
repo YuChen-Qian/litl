@@ -89,6 +89,10 @@
 #include <mutexee.h>
 #elif defined(SCL)
 #include <scl.h>
+#elif defined(AQSWONODE)
+#include <aqswonode.h>
+#elif defined(AQMWONODE)
+#include <aqmwonode.h>
 #else
 #error "No lock algorithm known"
 #endif
