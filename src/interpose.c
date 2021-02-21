@@ -93,6 +93,8 @@
 #include <aqswonode.h>
 #elif defined(AQMWONODE)
 #include <aqmwonode.h>
+#elif defined(AQMSCLWONODE)
+#include <aqmsclwonode.h>
 #else
 #error "No lock algorithm known"
 #endif
