@@ -93,6 +93,8 @@
 #include <aqswonode.h>
 #elif defined(AQMWONODE)
 #include <aqmwonode.h>
+#elif defined(AQSSCLWONODE)
+#include <aqssclwonode.h>
 #elif defined(AQMSCLWONODE)
 #include <aqmsclwonode.h>
 #else
