@@ -194,12 +194,12 @@ static inline void smp_wmb(void)
 
 static inline void enable_stealing(aqs_mutex_t *lock)
 {
-        atomic_andnot(_AQS_NOSTEAL_VAL, &lock->val);
+        WRITE_ONCE(lock->no_stealing, 1);
 }
 
 static inline void disable_stealing(aqs_mutex_t *lock)
 {
-        atomic_fetch_or_acquire(_AQS_NOSTEAL_VAL, &lock->val);
+        WRITE_ONCE(lock->no_stealing, 0);
 }
 
 static inline uint8_t is_stealing_disabled(aqs_mutex_t *lock)
